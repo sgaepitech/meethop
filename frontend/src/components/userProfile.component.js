@@ -12,7 +12,7 @@ import LocalActivityIcon from '@material-ui/icons/LocalActivity';
 
 const SampleUser = {
   username: 'Toto',
-  avatar: '../../public/images/avatar_sample.png',
+  avatar: '../public/images/avatar_sample.png',
   email: 'super@toto.com',
   password: 'secret',
   birthdate: '12.25.0',
@@ -142,7 +142,7 @@ const UserDescription = () => {
 
 const ChipsArray = () => {
     const classes = useStyles();
-    var myInterests = SampleUser.interests.map((obj, i) => { 
+    var myInterests = SampleUser.interests.map((obj, i) => {
       var rObj = {};
       rObj.key = i;
       rObj.label = obj;
@@ -150,14 +150,14 @@ const ChipsArray = () => {
     });
 
     const [chipData, setChipData] = React.useState(myInterests);
-  
+
     const handleDelete = chipToDelete => () => {
       setChipData(chips => chips.filter(chip => chip.key !== chipToDelete.key));
     };
-  
+
     return (
       <div>
-        {chipData.map(data => {  
+        {chipData.map(data => {
           return (
             <Chip
               variant="outlined"
@@ -190,7 +190,7 @@ const UserInterests = () => {
                 <Typography gutterBottom variant="subtitle1">
                   My personal interests
                 </Typography>
-                <ChipsArray/>                
+                <ChipsArray/>
               </Grid>
             </Grid>
           </Grid>
@@ -200,7 +200,7 @@ const UserInterests = () => {
   )}
 
   export default class UserDashboard extends Component {
-    
+
     render () {
       return(
         <div className="container">
