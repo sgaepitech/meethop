@@ -7,9 +7,6 @@ import {Avatar, Button, ButtonBase, Chip, Grid, Paper, Typography} from '@materi
 import AssistantIcon from '@material-ui/icons/Assistant';
 import LocalActivityIcon from '@material-ui/icons/LocalActivity';
 
-
-
-
 const SampleUser = {
   username: 'Toto',
   avatar: '../../public/images/avatar_sample.png',
@@ -56,8 +53,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-//<Avatar alt={SampleUser.username} src={SampleUser.avatar} className={classes.large} />
-
 const UserInformation = () => {
   let classes = useStyles();
   return(
@@ -73,6 +68,7 @@ const UserInformation = () => {
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
                 <Typography gutterBottom variant="subtitle1">
+                  <Avatar alt={SampleUser.username} src={require("../img/avatar_sample.png")} className={classes.large} />
                   My personal description
                 </Typography>
                 <Typography variant="body2" gutterBottom>
@@ -204,9 +200,9 @@ const UserInterests = () => {
     render () {
       return(
         <div className="container">
-                <UserDescription/>
-                <UserInterests/>
-            </div>
+          <UserDescription/>
+          <UserInterests/>
+        </div>
         )
       }
 }

@@ -1,24 +1,22 @@
 import React from 'react';
-import {
-    withStyles,
-    makeStyles,
-  } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 
 function Copyright() {
   return (
@@ -51,17 +49,20 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  outlinedRoot: {
+    '&:hover $notchedOutline': {
+      borderColor: 'red',
+    },
+    '&$focused $notchedOutline': {
+      borderColor: 'green',
+      borderWidth: 1,
+    },
+  },
+  notchedOutline: {},
+  focused: {},
 }));
 
-export default function Register() {
-
-  // this.state = {
-  //   username: "",
-  //   email: "",
-  //   password: "",
-  //   passwordconfirmation: ""
-  // };
-
+export default function Login() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -73,25 +74,11 @@ export default function Register() {
     setOpen(false);
   };
 
-  // handleChange = (event) => {
-	// 	const { name, value } = event.target;
-
-	// 	this.setState({
-	// 		[name]: value
-	// 	});
-	// };
-
-	// handleSubmit = (event) => {
-	// 	event.preventDefault();
-
-	// 	const { username, password } = this.state;
-  // }
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <Button variant="outlined" color="#45DBBE" onClick={handleClickOpen}>
-        Register
+        Sign in
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogContent>
@@ -100,20 +87,9 @@ export default function Register() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Register
+              Sign in
             </Typography>
             <form className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                autoFocus
-              />
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -123,6 +99,7 @@ export default function Register() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                autoFocus
               />
               <TextField
                 variant="outlined"
@@ -135,16 +112,9 @@ export default function Register() {
                 id="password"
                 autoComplete="current-password"
               />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="passwordconfirmation"
-                label="Password Confimation"
-                type="passwordconfirmation"
-                id="passwordconfirmation"
-                autoComplete="current-password-confirmation"
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
               />
               <Button
                 type="submit"
@@ -153,12 +123,17 @@ export default function Register() {
                 color="primary"
                 className={classes.submit}
               >
-                Register
+                Sign In
               </Button>
               <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
                 <Grid item>
                   <Link href="#" variant="body2">
-                    {"Already registered? Log in"}
+                    {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>
