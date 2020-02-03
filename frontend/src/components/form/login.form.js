@@ -49,6 +49,17 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  outlinedRoot: {
+    '&:hover $notchedOutline': {
+      borderColor: 'red',
+    },
+    '&$focused $notchedOutline': {
+      borderColor: 'green',
+      borderWidth: 1,
+    },
+  },
+  notchedOutline: {},
+  focused: {},
 }));
 
 export default function Login() {
