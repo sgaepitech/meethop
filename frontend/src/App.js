@@ -14,6 +14,7 @@ import UserProfile from "./components/userProfile.component"
 
 function App() {
   return (
+
     <Router>
       
       <Route path="/register" component={Register} />

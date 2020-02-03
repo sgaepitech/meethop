@@ -24,6 +24,9 @@ const SampleUser = {
 }
 
 const useStyles = makeStyles(theme => ({
+  components: {
+    marginTop: '50px',
+  },
   root: {
     flexGrow: 1,
   },
@@ -133,6 +136,11 @@ const UserDescription = () => {
                   </Button>
                 </Typography>
               </Grid>
+              <Grid item>
+                <Typography variant="body2" style={{ cursor: 'pointer' }}>
+                    <Avatar alt={SampleUser.username} src={SampleUser.avatar} className={classes.large} />
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
@@ -199,13 +207,14 @@ const UserInterests = () => {
     </div>
   )}
 
-  export default class UserDashboard extends Component {
+  export default class UserProfile extends Component {
     
     render () {
+
       return(
         <div className="container">
-                <UserDescription/>
-                <UserInterests/>
+                <UserDescription />
+                <UserInterests />
             </div>
         )
       }

@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#45DBBE",
   },
   form: {
-    width: '75%',
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
