@@ -1,0 +1,30 @@
+:root {
+    --bay: #45DBBE;
+    --coral: #F2917E;
+    --sunlight: #F9DCA2;
+    --red: #F60005;
+    --text: #3e3e3e;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    font-weight: 100;
+    font-size: 72px;
+    color: var(--bay);
+}
+
+h2 {
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 32px;
+    color: var(--coral);
+}
+
+p {
+    font-weight: 300;
+    font-size: 18px;
+    color:
+}
