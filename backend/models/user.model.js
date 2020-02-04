@@ -1,3 +1,6 @@
+const config = require('config');
+const jwt = require('jsonwebtoken');
+const Joi = require('joi');
 const mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
@@ -20,7 +23,7 @@ var userSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    localisation: {
+    location: {
         type: String,
         required: true
     },
@@ -37,6 +40,11 @@ var userSchema = new mongoose.Schema({
         default: true
     }
 });
+
+userSchema.methods.generateAuthToken = function() { 
+    const token = jwt.sign({ _id: this._id }, config.get('myprivatekey')); //get the private key from the config file -> environment variable
+    return token;
+}
 
 // mongoose.model('User', userSchema);
 module.exports = mongoose.model('User', userSchema);

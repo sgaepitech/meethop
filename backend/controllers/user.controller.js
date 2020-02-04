@@ -7,6 +7,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const authRegister = require('../auth/register.validator');
 const authLogin = require('../auth/login.validator');
+const auth = require("../middleware/auth");
 
 mongoose.set('useFindAndModify', false);
 
@@ -15,13 +16,13 @@ mongoose.set('useFindAndModify', false);
 // # CREATE USER #
 // ###############
 
-router.post("/create", (req, res) => {
+router.post("/create", async (req, res) => {
     const { errors, isValid } = authRegister(req.body);
     // Check validation
     if (!isValid) {
         return res.status(400).json(errors);
     }
-    User.findOne(
+    await User.findOne(
             { email: req.body.email }
         )
         .then(user => {
@@ -33,23 +34,29 @@ router.post("/create", (req, res) => {
                         email: req.body.email,
                         password: req.body.password,
                         birthdate: req.body.birthdate,
-                        localisation: req.body.localisation,
+                        location: req.body.location,
                         interests: req.body.interests
-                    }); 
+                }); 
                 // Hash password before saving in database
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
+                bcrypt.genSalt(10, async (err, salt) => {
+                    await bcrypt.hash(newUser.password, salt, async (err, hash) => {
                         if (err) throw err;
                         newUser.password = hash;
-                        newUser
+                        await newUser
                             .save()
                             .then(user => res.json(user))
                             .catch(err => console.log(err));
-                        });
                     });
-            }
-        });
+                const token = newUser.generateAuthToken();
+                    res.header("x-auth-token", token).send({
+                        _id: newUser._id,
+                        username: newUser.username,
+                        email: newUser.email
+                    });
+                });
+        }
     });
+});
 
 
 // #############
@@ -64,12 +71,19 @@ router.post("/create", (req, res) => {
 //         })
 //     });
 
-router.route('/read/:id').get(function(req, res) {
-    let id = req.params.id;
-    User.findById(id, function(err, user) {
-        res.json(user);
-        });
-    });
+// ############################################ fonctionnel
+// router.route('/read/:id').get(function(req, res) {
+//     let id = req.params.id;
+//     User.findById(id, function(err, user) {
+//         res.json(user);
+//         });
+//     });
+
+// TESTING AUTH STUFF ##################################
+router.get("/read", auth, async (req, res) => {
+    const user = await User.findById(req.user._id).select("-password");
+    res.json(user);
+});
 
 
 // ###############
@@ -98,8 +112,8 @@ router.route('/update/:id').put((req, res, next) => {
             if (req.body.description) {
                 user.description = req.body.description;
             }
-            if (req.body.localisation) {
-                user.localisation = req.body.localisation;
+            if (req.body.location) {
+                user.location = req.body.location;
             }
             if (req.body.interests) {
                 user.interests = req.body.interests;
@@ -146,7 +160,12 @@ router.post("/login", (req, res) => {
         bcrypt.compare(password, user.password).then(isMatch => {
             if (isMatch) {
                 // const payload = {_id: user._id, login: user.login }
-                // const accessToken = generateAccessToken(payload);
+                const accessToken = user.generateAuthToken();
+                res.header("x-auth-token", accessToken).send({
+                    _id: user._id,
+                    username: user.username,
+                    email: user.email
+                });
                 // res.json({accessToken: accessToken})
                 res.json({accessToken: "login ok"})
             } else {
