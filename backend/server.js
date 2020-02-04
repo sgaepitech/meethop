@@ -2,9 +2,9 @@ const config = require("config");
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const path = require('path');
 const userController = require('./controllers/user.controller');
 // const bodyParser = require('body-parser');
+const moment = require("moment");
 
 var router = express.Router();
 
@@ -32,4 +32,6 @@ const connection = mongoose.connection;connection.once('open', () => {
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
+    // console.log(moment().subtract(18, "years").calendar());
+    console.log(Date.now());
 });
