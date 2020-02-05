@@ -35,7 +35,7 @@ router.post("/create", async (req, res) => {
                     birthdate: req.body.birthdate,
                     location: req.body.location,
                     interests: req.body.interests
-            }); 
+            });
 
             // Hash password before saving in database
             bcrypt.genSalt(10, async (err, salt) => {
@@ -85,7 +85,7 @@ router.put("/update", auth, (req, res, next) => {
             if (req.body.description) { user.description = req.body.description; }
             if (req.body.location) { user.location = req.body.location; }
             if (req.body.interests) { user.interests = req.body.interests; }
-            
+
             user.save();
             res.status(200).json({
                 _id: req.user._id,

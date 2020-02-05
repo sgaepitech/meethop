@@ -23,12 +23,14 @@ var eventSchema = new mongoose.Schema({
         type: String
     },
     participants: {
-        type: Array,
-        required: true
+        type: Array
+    },
+    participantsNumber: {
+        type: Number
     },
     waitingList: {
         type: Boolean,
-        default: true
+        default: false
     },
     owner: {
         type: String
