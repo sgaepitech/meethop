@@ -1,6 +1,5 @@
 const config = require('config');
 const jwt = require('jsonwebtoken');
-const Joi = require('joi');
 const mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
@@ -38,6 +37,20 @@ var userSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+    isWaitingForEvent: {
+        type: Array
+    },
+    isApprovedFromEvent: {
+        type: Array
+    },
+    avatar: {
+        type: String,
+        default: "monavatar.png"
+    },
+    banner: {
+        type: String,
+        default: "mabanner.png"
     }
 });
 
@@ -46,5 +59,4 @@ userSchema.methods.generateAuthToken = function() {
     return token;
 }
 
-// mongoose.model('User', userSchema);
 module.exports = mongoose.model('User', userSchema);
