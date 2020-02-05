@@ -46,6 +46,7 @@ export default class landingPage extends Component {
             <div className="bg-filter" style={{height: "100%"}}>
                 <TextTitle />
                 <Register />
+                <Login />
             </div>
         </div>
     )}
