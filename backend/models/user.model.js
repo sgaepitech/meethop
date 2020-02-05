@@ -1,3 +1,5 @@
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
@@ -20,7 +22,7 @@ var userSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    localisation: {
+    location: {
         type: String,
         required: true
     },
@@ -35,8 +37,26 @@ var userSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+    isWaitingForEvent: {
+        type: Array
+    },
+    isApprovedFromEvent: {
+        type: Array
+    },
+    avatar: {
+        type: String,
+        default: "monavatar.png"
+    },
+    banner: {
+        type: String,
+        default: "mabanner.png"
     }
 });
 
-// mongoose.model('User', userSchema);
+userSchema.methods.generateAuthToken = function() {
+    const token = jwt.sign({ _id: this._id }, config.get('myprivatekey')); //get the private key from the config file -> environment variable
+    return token;
+}
+
 module.exports = mongoose.model('User', userSchema);
