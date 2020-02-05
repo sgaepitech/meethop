@@ -9,7 +9,6 @@ import LocalActivityIcon from '@material-ui/icons/LocalActivity';
 
 const SampleUser = {
   username: 'Toto',
-  avatar: '../../public/images/avatar_sample.png',
   email: 'super@toto.com',
   password: 'secret',
   birthdate: '12.25.0',
@@ -58,6 +57,7 @@ const UserInformation = () => {
   return(
   <div className={classes.root}>
       <Paper className={classes.paper}>
+      <Avatar src={require("../img/avatar_sample.png")} className={classes.large} />
         <Grid container spacing={2}>
           <Grid item>
             <ButtonBase className={classes.image}>
@@ -68,11 +68,10 @@ const UserInformation = () => {
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
                 <Typography gutterBottom variant="subtitle1">
-                  <Avatar alt={SampleUser.username} src={require("../img/avatar_sample.png")} className={classes.large} />
                   My personal description
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                  {SampleUser.description}
+                <Avatar src={require("../img/avatar_sample.png")} className={classes.large} />
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
                   I'm living in {SampleUser.localisation}
@@ -99,8 +98,11 @@ const UserDescription = () => {
   let classes = useStyles();
   return(
   <div className={classes.root}>
+
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
+        <Avatar src={require("../img/avatar_sample.png")} className={classes.large} />
+
           <Grid item>
             <ButtonBase className={classes.image}>
             <AssistantIcon className={classes.customIconSize}/>
@@ -138,7 +140,7 @@ const UserDescription = () => {
 
 const ChipsArray = () => {
     const classes = useStyles();
-    var myInterests = SampleUser.interests.map((obj, i) => { 
+    var myInterests = SampleUser.interests.map((obj, i) => {
       var rObj = {};
       rObj.key = i;
       rObj.label = obj;
@@ -146,14 +148,14 @@ const ChipsArray = () => {
     });
 
     const [chipData, setChipData] = React.useState(myInterests);
-  
+
     const handleDelete = chipToDelete => () => {
       setChipData(chips => chips.filter(chip => chip.key !== chipToDelete.key));
     };
-  
+
     return (
       <div>
-        {chipData.map(data => {  
+        {chipData.map(data => {
           return (
             <Chip
               variant="outlined"
@@ -186,7 +188,7 @@ const UserInterests = () => {
                 <Typography gutterBottom variant="subtitle1">
                   My personal interests
                 </Typography>
-                <ChipsArray/>                
+                <ChipsArray/>
               </Grid>
             </Grid>
           </Grid>
@@ -196,7 +198,7 @@ const UserInterests = () => {
   )}
 
   export default class UserDashboard extends Component {
-    
+
     render () {
       return(
         <div className="container">
