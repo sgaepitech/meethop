@@ -15,9 +15,8 @@ import landingPage from "./components/landingPage.component"
 
 function App() {
   return (
-
     <Router>
-      <Route path="/" component={landingPage} />
+      <Route path="/" exact component={landingPage} />
       <Route path="/login" component={Login} />
       <Route path="/profile" component={UserProfile} />
     </Router>
