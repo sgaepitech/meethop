@@ -1,23 +1,24 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
-    withStyles,
-    makeStyles,
-  } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+  Avatar, 
+  Button, 
+  CssBaseline, 
+  TextField, 
+  Grid, 
+  Link, 
+  Typography,
+  Container,
+  Dialog,
+  DialogContent,
+  Box,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from '@material-ui/core/';
 
 
 function Copyright() {
@@ -64,20 +65,34 @@ const useStyles = makeStyles(theme => ({
     height: 48,
     padding: '0 30px',
     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    "&:hover": {
+      background: '#45DBBE',
+    },
   }
 }));
 
 export default function Register() {
 
-  // this.state = {
-  //   username: "",
-  //   email: "",
-  //   password: "",
-  //   passwordconfirmation: ""
-  // };
-
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [city, setCity] = React.useState('');
+  const [interests, setInterests] = React.useState(false);
+
+  const inputLabel = React.useRef(null);
+  // const [labelWidth, setLabelWidth] = React.useState(0);
+  // React.useEffect(() => {
+  //   setLabelWidth(inputLabel.current.offsetWidth);
+  // }, []);
+
+  const { concert, sport, outdoor, movie_theater, theater, museum, nautic, shopping, board_games } = interests;
+
+  const handleChangeCity = e => {
+    setCity(e.target.value);
+  };
+
+  const handleChangeInterests = name => event => {
+    setInterests({ ...interests, [name]: event.target.checked });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -99,9 +114,6 @@ export default function Register() {
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
           <DialogContent>
             <div className={classes.paper}>
-              <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
-              </Avatar>
               <Typography component="h1" variant="h5">
                 Register
               </Typography>
@@ -149,16 +161,87 @@ export default function Register() {
                   fullWidth
                   name="passwordconfirmation"
                   label="Password Confimation"
-                  type="passwordconfirmation"
+                  type="password"
                   id="passwordconfirmation"
                   autoComplete="current-password-confirmation"
                 />
+                <TextField
+                  className={classes.input}
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="birthdate"
+                  type="date"
+                  id="birthdate"
+                  autoComplete="current-password-confirmation"
+                />
+                <InputLabel id="demo-simple-select-filled-label">City</InputLabel>
+                <Select
+                  labelId="city"
+                  id="city"
+                  value={city}
+                 onChange={handleChangeCity}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={1}>Paris</MenuItem>
+                  <MenuItem value={2}>Lyon</MenuItem>
+                  <MenuItem value={3}>Bordeaux</MenuItem>
+                  <MenuItem value={4}>Marseille</MenuItem>
+                  <MenuItem value={5}>Lille</MenuItem>
+                  <MenuItem value={6}>Nice</MenuItem>
+                  <MenuItem value={7}>Nantes</MenuItem>
+                  <MenuItem value={8}>Strasbourg</MenuItem>
+                </Select>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChangeInterests('theater')} value="theater" />}
+                    label="Theater"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChangeInterests('museum')} value="museum" />}
+                    label="Museum"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChangeInterests('nautic')} value="nautic" />}
+                    label="Nautic"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChangeInterests('museum')} value="museum" />}
+                    label="Museum"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChangeInterests('shopping')} value="shopping" />}
+                    label="Shopping"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChangeInterests('board_games')} value="board_games" />}
+                    label="Board games"
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChangeInterests('concert')} value="concert" />}
+                    label="Concert"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox onChange={handleChangeInterests('sport')} value="sport" />}
+                    label="Sport"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox onChange={handleChangeInterests('outdoor')} value="outdoor" />}
+                      label="Outdoor"
+                  />
+                </FormGroup>
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"
-                  className={classes.submit}
+                  className={classes.btnLp}
                 >
                   Register
                 </Button>
