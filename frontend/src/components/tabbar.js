@@ -62,7 +62,7 @@ export default function ScrollableTabsButtonForce() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="#097988">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -74,10 +74,10 @@ export default function ScrollableTabsButtonForce() {
         >
           <Tab label="Item One" icon={<PhoneIcon />} {...a11yProps(0)} />
           <Tab label="Item Two" icon={<FavoriteIcon />} {...a11yProps(1)} />
-          <Tab label="Item Three" icon={<PersonPinIcon />} {...a11yProps(2)} />
-          <Tab label="Item Four" icon={<HelpIcon />} {...a11yProps(3)} />
-          <Tab label="Item Five" icon={<ShoppingBasket />} {...a11yProps(4)} />
-          <Tab label="Item Six" icon={<ThumbDown />} {...a11yProps(5)} />
+          <Tab label="My Profile" icon={<PersonPinIcon />} {...a11yProps(2)} />
+          <Tab label="Events" icon={<HelpIcon />} {...a11yProps(3)} />
+          <Tab label="Login" icon={<ShoppingBasket />} {...a11yProps(4)} />
+          <Tab label="Register" icon={<ThumbDown />} {...a11yProps(5)} />
           <Tab label="Item Seven" icon={<ThumbUp />} {...a11yProps(6)} />
         </Tabs>
       </AppBar>
@@ -88,16 +88,16 @@ export default function ScrollableTabsButtonForce() {
         Item Two
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        My Profile
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        Events
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
+        Login
       </TabPanel>
       <TabPanel value={value} index={5}>
-        Item Six
+        Register
       </TabPanel>
       <TabPanel value={value} index={6}>
         Item Seven
