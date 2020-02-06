@@ -145,7 +145,8 @@ router.post("/login", (req, res) => {
                     birthdate: user.birthdate,
                     description: user.description,
                     location: user.location,
-                    interests: user.interests
+                    interests: user.interests,
+                    token: accessToken
                 });
             } else {
                 return res
