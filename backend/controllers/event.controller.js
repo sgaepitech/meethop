@@ -38,6 +38,7 @@ router.post("/create", auth, (req, res) => {
 });
 
 router.get("/", auth, (req, res) => {
+  console.log('retour de /')
   Event.find((err, events) => {
     if(err){
       console.log(err);
@@ -48,7 +49,7 @@ router.get("/", auth, (req, res) => {
 });
 
 router.get("/owner", auth, (req, res) =>{
-  Event.find({_id: req.user._id}, (err, events) => {
+  Event.find({owner: req.user._id}, (err, events) => {
     if (err){
       console.log(err);
     } else {
@@ -58,7 +59,8 @@ router.get("/owner", auth, (req, res) =>{
 })
 
 router.get("/:category", auth, (req, res) =>{
-  Event.find({category: req.param.category}, (err, events) =>{
+  console.log(req.params.category);
+  Event.find({category: req.params.category}, (err, events) =>{
     if(err){
       console.log(err);
     } else {
@@ -72,37 +74,54 @@ router.put("/edit/:id", auth, (req, res, next) =>{
     if (err)
       return next(err);
     else {
-      event.title = req.body.title,
-      event.description = req.body.description,
-      event.category = req.body.category,
-      event.owner = req.user._id,
-      event.date = req.body.date,
+      if(req.body.title) {event.title = req.body.title;}
+      if(req.body.description) {event.description = req.body.description;}
+      if(req.body.category) {event.category = req.body.category;}
+      if(req.user._id) {event.owner = req.user._id;}
+      if(req.body.date) {event.date = req.body.date;}
       event.save();
       res.status(200).json(event)
     }
   })
 })
 
-router.put("/postulate/:id", auth, (req, res) =>{
+router.put("/postulate/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
       return next(err);
     else {
-      if (event.waitingList.some((part) =>{
-        return part.equals(req.params.id)}) == true)
+      if (event.waitingList.some((waiter) =>{
+        if (waiter){
+          console.log('waiter boucle')
+        return waiter.equals(req.user._id)
+      }
+      else return false;
+}
+)
+         == true){
           res.status(400).send('already postulating');
+        }
+
 
       else{
-        if(participants.length >= participants_number)
+        if(event.participants.length >= event.participants_number)
             return('Event already full')
         else{
           event.waitingList.push(req.user._id)
           event.save()
+          .then((user) => {
+                  res.json(user)
+                })
+          .catch((err) =>{
+              console.log(err)
+          })
+        }
+
           }
         }
-      }
+      })
     });
-  });
+
 
 router.put("/unpostulate/:id", auth, (req, res) =>{
   Event.findById(req.params.id, (err, event) =>{
