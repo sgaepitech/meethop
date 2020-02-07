@@ -137,7 +137,7 @@ router.post("/login", (req, res) => {
         bcrypt.compare(password, user.password).then(isMatch => {
             if (isMatch) {
                 const accessToken = user.generateAuthToken();
-                res.body("x-auth-token", accessToken).send({
+                res.header("x-auth-token", accessToken).send({
                     _id: user._id,
                     username: user.username,
                     email: user.email,
