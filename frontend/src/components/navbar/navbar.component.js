@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import Logo from '../../img/logo.png';
 import { Link } from 'react-router-dom';
-import Login from '../form/login.form';
+import Login from '../login/login.component';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,6 +21,16 @@ const useStyles = makeStyles(theme => ({
 export default function NavBar(props) {
     const { logged, username, imgAvatar } = props
     const classes = useStyles();
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     if(props.logged == "isLogged") {
         return (
@@ -54,8 +64,8 @@ export default function NavBar(props) {
                 <Toolbar>
                     <img src={Logo} alt="Logo" width="80" />
                     <Typography variant="h6" color="primary" className={classes.title}>MeetHop</Typography>
-                    {/* <Button variant="contained" color="primary" onClick={() => {console.log("Logout clicked")}}>Login</Button> */}
-                    <Login />
+                    <Button variant="contained" color="primary" onClick={handleOpen}>Login</Button>
+                    <Login open={open} onClose={handleClose} />
                 </Toolbar>
             </AppBar>
             </div>
