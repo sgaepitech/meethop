@@ -38,22 +38,7 @@ const TextTitle = () => {
     )
 }
 
-function Copyright() {
-    return (
-      <Box mt={8}>
-        <Typography variant="body2" color="textSecondary" align="center">
-          {'Copyright © '}
-          <Link color="inherit" href="https://material-ui.com/">
-            MeetHop
-          </Link>{' '}
-          {new Date().getFullYear()}
-          {'.'}
-        </Typography>
-      </Box>
-    );
-}
-
-export default class landingPage extends Component {
+export default class Main extends Component {
     constructor(){
         super();
         this.state={
@@ -75,14 +60,14 @@ export default class landingPage extends Component {
     
     render () {
       return(
-        <div className="bg-lp" style={{height: "100%"}}>
+        <div style={{height: "100%"}}>
             <div className="bg-filter" style={{height: "100%"}}>
                 <TextTitle />
                 <Grid container justify="center">
                     <Button variant="contained" color="primary" onClick={this.handleOpen}>Register</Button>
                 </Grid>
                 <Register open={this.state.open} onClose={this.handleClose} />
-                <Copyright />
+                {/* <Copyright /> */}
             </div>
         </div>
     )}
