@@ -50,7 +50,7 @@ export default class Login extends Component {
         body: JSON.stringify(User),
         })
         .then(res => res.json())
-        .then(res => console.log(res));
+        .then(res => localStorage.setItem('accessToken', res.token));
     }
 
     render(){
