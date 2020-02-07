@@ -9,10 +9,10 @@ module.exports = function authevent(data) {
     data.date = !isEmpty(data.date) ? data.date : "";
 
     if (Validator.isEmpty(data.title)) {
-        errors.title = "Email field is required";
+        errors.title = "Title field is required";
     }
     if (Validator.isEmpty(data.description)) {
-        errors.description = "Password field is required";
+        errors.description = "Description field is required";
     }
     if (Validator.isEmpty(data.category)) {
         errors.category = "Category field is required";

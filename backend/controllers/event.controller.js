@@ -69,6 +69,17 @@ router.get("/:category", auth, (req, res) =>{
   })
 })
 
+router.get("/:id", auth, (req, res) =>{
+  console.log(req.params.id);
+  Event.findOne({id: req.params.id}, (err, ev) =>{
+    if(err){
+      console.log(err);
+    } else {
+      res.json(ev)
+    }
+  })
+})
+
 router.put("/edit/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) => {
     if (err)
@@ -85,42 +96,54 @@ router.put("/edit/:id", auth, (req, res, next) =>{
   })
 })
 
+router.delete("/delete/:id", auth, (req, res, next) =>{
+  Event.findByIdAndRemove(req.params.id, (err, ev) => {
+      if (err)
+          return next(error);
+      else {
+          res.status(200).json({msg: ev});
+      }
+  });
+});
+
+
 router.put("/postulate/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
       return next(err);
-    else {
-      if (event.waitingList.some((waiter) =>{
-        if (waiter){
-          console.log('waiter boucle')
-        return waiter.equals(req.user._id)
-      }
-      else return false;
-}
-)
-         == true){
-          res.status(400).send('already postulating');
-        }
 
-
-      else{
-        if(event.participants.length >= event.participants_number)
-            return('Event already full')
-        else{
-          event.waitingList.push(req.user._id)
-          event.save()
-          .then((user) => {
-                  res.json(user)
-                })
-          .catch((err) =>{
-              console.log(err)
-          })
-        }
-
-          }
-        }
-      })
+    var postulantExists = event.waitingList.some((postulant) =>{
+      return postulant && postulant.equals(req.user._id)
     });
+
+    if (!postulantExists) {
+      if (event.participants.length >= event.participants_number)
+          return('Event already full');
+
+      const User = mongoose.model('User');
+      User.findById(req.user._id, (err, lol) => {
+        console.log("user :");
+        console.log(lol);
+      });
+
+      var objectId = mongoose.Types.ObjectId;
+      console.log(event.waitingList);
+      event.waitingList.push(req.user._id)
+      console.log(event.waitingList);
+      event.save()
+      .then((ev) => {
+        res.json(ev)
+        console.log(ev)
+      }).catch((err) =>{
+        console.log(req.user);
+        console.log(err);
+        console.log(event);
+        res.status(500).send('Error : cannot add postulant');
+      });
+    } else
+      res.status(400).send('already postulating');
+  })
+});
 
 
 router.put("/unpostulate/:id", auth, (req, res) =>{
@@ -129,6 +152,13 @@ router.put("/unpostulate/:id", auth, (req, res) =>{
       return next(err);
     else {
       event.waitingList.splice(event.waitingList.indexOf(req.user._id))
+      event.save()
+      .then((event) =>{
+        res.status(200).json(event)
+      }).catch((err) => {
+        console.log(err);
+        res.status(500).send('unpostulate failed')
+      })
     }
   });
 })
@@ -137,36 +167,37 @@ router.put("/validate/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
       return next(err);
-    else {
-      if (event.participants.some((part) =>{
-        return part.equals(req.params.id)}) == true)
-        res.status(400).send('already participating');
 
-      else{
-        if(participants.length >= participants_number)
-            return('Event already full')
-        else{
-          event.participants.push(req.user._id)
-          event.waitingList.splice(event.waitingList.indexOf(req.params.id))
-          event.save()
+    var participantExists = event.participants.some((part) =>{
+      return part && part.equals(req.body._id)
+    });
 
-  .then((event) => {
-        res.status(200).json(user)
-      })
-  .catch(err =>{
-        res.status(400).send('participation failed')
+    if (!participantExists) {
+      if(event.participants.length >= event.participants_number)
+        return('Event already full');
+      console.log(req.body._id)
+      event.participants.push(req.body._id)
+      event.waitingList.splice(event.waitingList.indexOf(req.body._id))
+      event.save()
+      .then((event) => {
+        res.status(200).json(event)
+      }).catch((err) => {
+        console.log(err);
+        res.status(500).send('participation failed')
       });
-    }}}
-  })
-})
+    }
+    else
+      res.status(400).send('already participating');
+  });
+});
 
 router.put("/unvalidate/:id", auth, (req, res) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
       return next(err);
     else {
-      event.participants.splice( event.participants.indexOf(req.params.id), 1 )
-      event.waitingList.push(req.params.id)
+      event.participants.splice( event.participants.indexOf(req.body._id), 1 )
+      event.waitingList.push(req.body._id)
 
           event.save()
           .then((event) => {
