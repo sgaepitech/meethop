@@ -1,0 +1,10 @@
+.card {
+    max-width: 100% !important;
+}
+.cardhead {
+    color: #fff;
+    background-color: #e66465;
+}
+.carduser{
+    min-height: 100px;
+}
