@@ -14,7 +14,8 @@ var eventSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: Date
+        type: Date,
+        required: true
     },
     period: {
         type: String
@@ -23,14 +24,15 @@ var eventSchema = new mongoose.Schema({
         type: String
     },
     participants: {
-        type: Array
+        type: [mongoose.Schema.Types.ObjectID],
+        ref: 'User'
     },
     participantsNumber: {
         type: Number
     },
     waitingList: {
-        type: Boolean,
-        default: false
+        type: [mongoose.Schema.Types.ObjectID],
+        ref: 'User'
     },
     owner: {
         type: String

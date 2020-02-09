@@ -1,37 +1,52 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Redirect
 } from "react-router-dom";
-
 import './App.css';
 import './css/text.css';
+import Landing from './components/landing/landing.component';
+import Main from './components/main/main.component';
+import EventManager from './components/event/dashboard.event.component';
+import NavBar from './components/navbar/navbar.component';
 
-import Register from './components/form/register.form';
-import Login from './components/form/login.form';
-import UserProfile from "./components/userProfile.component"
-import CardMedia  from './components/card.js';
-import ScrollableTabsButtonForce from './components/tabbar.js';
-import landingpage from './components/landingPage.component'
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    localStorage.getItem !== null
+      ? <Component {...props} />
+      : <Redirect to='/' />
+  )} />
+)
 
-function App() {
-  return (
-    <Router>
-      <Route exact path="/" component={landingpage} />
-      <Route path="/register" component={Register} />
-      <Route path="/login" component={Login} />
+class App extends Component {
 
-
-      <Route path="/logged" component={ScrollableTabsButtonForce} />
-      <Switch>
-
-      <Route path="/logged/test" component={CardMedia} />
-      <Route path="/logged/profile" component={UserProfile} />
-      </Switch>
-    </Router>
-  );
+  render() {
+    if(localStorage.getItem('accessToken') !== null) {
+      return (
+        <Router>
+          <NavBar logged="isLoggd" />
+          <Switch>
+            <Route exact path='/' component={Landing} />
+            <PrivateRoute path='/main' component={Main} />
+            <PrivateRoute path='/eventmanager' component={EventManager} />
+          </Switch>
+        </Router>
+      );
+    } else {
+      return (
+        <Router>
+          <NavBar/>
+          <Switch>
+            <Route exact path='/' component={Landing} />
+            <Route path='/main' component={Main} />
+            {/* <Route path='/eventmanager' component={EventManager} /> */}
+          </Switch>
+        </Router>
+      );
+    }
+  }
 }
 
 export default App;

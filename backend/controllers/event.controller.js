@@ -38,6 +38,7 @@ router.post("/create", auth, (req, res) => {
 });
 
 router.get("/", auth, (req, res) => {
+  console.log('retour de /')
   Event.find((err, events) => {
     if(err){
       console.log(err);
@@ -48,7 +49,7 @@ router.get("/", auth, (req, res) => {
 });
 
 router.get("/owner", auth, (req, res) =>{
-  Event.find({_id: req.user._id}, (err, events) => {
+  Event.find({owner: req.user._id}, (err, events) => {
     if (err){
       console.log(err);
     } else {
@@ -58,11 +59,23 @@ router.get("/owner", auth, (req, res) =>{
 })
 
 router.get("/:category", auth, (req, res) =>{
-  Event.find({category: req.param.category}, (err, events) =>{
+  console.log(req.params.category);
+  Event.find({category: req.params.category}, (err, events) =>{
     if(err){
       console.log(err);
     } else {
       res.json(events)
+    }
+  })
+})
+
+router.get("/:id", auth, (req, res) =>{
+  console.log(req.params.id);
+  Event.findOne({id: req.params.id}, (err, ev) =>{
+    if(err){
+      console.log(err);
+    } else {
+      res.json(ev)
     }
   })
 })
@@ -72,37 +85,66 @@ router.put("/edit/:id", auth, (req, res, next) =>{
     if (err)
       return next(err);
     else {
-      event.title = req.body.title,
-      event.description = req.body.description,
-      event.category = req.body.category,
-      event.owner = req.user._id,
-      event.date = req.body.date,
+      if(req.body.title) {event.title = req.body.title;}
+      if(req.body.description) {event.description = req.body.description;}
+      if(req.body.category) {event.category = req.body.category;}
+      if(req.user._id) {event.owner = req.user._id;}
+      if(req.body.date) {event.date = req.body.date;}
       event.save();
       res.status(200).json(event)
     }
   })
 })
 
-router.put("/postulate/:id", auth, (req, res) =>{
+router.delete("/delete/:id", auth, (req, res, next) =>{
+  Event.findByIdAndRemove(req.params.id, (err, ev) => {
+      if (err)
+          return next(error);
+      else {
+          res.status(200).json({msg: ev});
+      }
+  });
+});
+
+
+router.put("/postulate/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
       return next(err);
-    else {
-      if (event.waitingList.some((part) =>{
-        return part.equals(req.params.id)}) == true)
-          res.status(400).send('already postulating');
 
-      else{
-        if(participants.length >= participants_number)
-            return('Event already full')
-        else{
-          event.waitingList.push(req.user._id)
-          event.save()
-          }
-        }
-      }
+    var postulantExists = event.waitingList.some((postulant) =>{
+      return postulant && postulant.equals(req.user._id)
     });
-  });
+
+    if (!postulantExists) {
+      if (event.participants.length >= event.participants_number)
+          return('Event already full');
+
+      const User = mongoose.model('User');
+      User.findById(req.user._id, (err, lol) => {
+        console.log("user :");
+        console.log(lol);
+      });
+
+      var objectId = mongoose.Types.ObjectId;
+      console.log(event.waitingList);
+      event.waitingList.push(req.user._id)
+      console.log(event.waitingList);
+      event.save()
+      .then((ev) => {
+        res.json(ev)
+        console.log(ev)
+      }).catch((err) =>{
+        console.log(req.user);
+        console.log(err);
+        console.log(event);
+        res.status(500).send('Error : cannot add postulant');
+      });
+    } else
+      res.status(400).send('already postulating');
+  })
+});
+
 
 router.put("/unpostulate/:id", auth, (req, res) =>{
   Event.findById(req.params.id, (err, event) =>{
@@ -110,6 +152,13 @@ router.put("/unpostulate/:id", auth, (req, res) =>{
       return next(err);
     else {
       event.waitingList.splice(event.waitingList.indexOf(req.user._id))
+      event.save()
+      .then((event) =>{
+        res.status(200).json(event)
+      }).catch((err) => {
+        console.log(err);
+        res.status(500).send('unpostulate failed')
+      })
     }
   });
 })
@@ -118,36 +167,37 @@ router.put("/validate/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
       return next(err);
-    else {
-      if (event.participants.some((part) =>{
-        return part.equals(req.params.id)}) == true)
-        res.status(400).send('already participating');
 
-      else{
-        if(participants.length >= participants_number)
-            return('Event already full')
-        else{
-          event.participants.push(req.user._id)
-          event.waitingList.splice(event.waitingList.indexOf(req.params.id))
-          event.save()
+    var participantExists = event.participants.some((part) =>{
+      return part && part.equals(req.body._id)
+    });
 
-  .then((event) => {
-        res.status(200).json(user)
-      })
-  .catch(err =>{
-        res.status(400).send('participation failed')
+    if (!participantExists) {
+      if(event.participants.length >= event.participants_number)
+        return('Event already full');
+      console.log(req.body._id)
+      event.participants.push(req.body._id)
+      event.waitingList.splice(event.waitingList.indexOf(req.body._id))
+      event.save()
+      .then((event) => {
+        res.status(200).json(event)
+      }).catch((err) => {
+        console.log(err);
+        res.status(500).send('participation failed')
       });
-    }}}
-  })
-})
+    }
+    else
+      res.status(400).send('already participating');
+  });
+});
 
 router.put("/unvalidate/:id", auth, (req, res) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
       return next(err);
     else {
-      event.participants.splice( event.participants.indexOf(req.params.id), 1 )
-      event.waitingList.push(req.params.id)
+      event.participants.splice( event.participants.indexOf(req.body._id), 1 )
+      event.waitingList.push(req.body._id)
 
           event.save()
           .then((event) => {
