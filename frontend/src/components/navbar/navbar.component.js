@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NavBar(props) {
-    const { logged, username, imgAvatar } = props
+    const { status, username, imgAvatar, logout, login } = props
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
@@ -32,12 +32,12 @@ export default function NavBar(props) {
         setOpen(false);
     };
 
-    if(props.logged == "isLogged") {
+    if(props.status === true) {
         return (
             <div className={classes.root}>
             <AppBar position="absolute"  style={{ background: 'transparent', boxShadow: 'none'}}>
                 <Toolbar>
-                    <Link to={"/"} className="nav-link">
+                    <Link to={"/main"} className="nav-link">
                         <img src={Logo} alt="Logo" width="80" />
                     </Link>
                     <Typography variant="h6" color="primary" className={classes.title}>MeetHop</Typography>
@@ -47,12 +47,10 @@ export default function NavBar(props) {
                             <Avatar className={classes.purple}>OP</Avatar>
                         </Button>
                     </Link>
-                    <Link to={"/eventmanagement"} className="nav-link">
+                    <Link to={"/event"} className="nav-link">
                         <Button variant="contained" color="primary" onClick={() => {console.log("Event management clicked")}}>Event management</Button>
                     </Link>
-                    <Link to={"/logout"} className="nav-link">
-                        <Button variant="contained" color="primary" onClick={() => {console.log("Logout clicked")}}>Logout</Button>
-                    </Link>
+                    <Button variant="contained" color="primary" onClick={props.logout}>Logout</Button>
                 </Toolbar>
             </AppBar>
             </div>
@@ -65,7 +63,7 @@ export default function NavBar(props) {
                     <img src={Logo} alt="Logo" width="80" />
                     <Typography variant="h6" color="primary" className={classes.title}>MeetHop</Typography>
                     <Button variant="contained" color="primary" onClick={handleOpen}>Login</Button>
-                    <Login open={open} onClose={handleClose} />
+                    <Login open={open} onClose={handleClose} login={props.login} />
                 </Toolbar>
             </AppBar>
             </div>

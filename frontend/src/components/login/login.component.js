@@ -12,7 +12,6 @@ import {
     FormControlLabel,
     Checkbox
 } from '@material-ui/core/';
-import Auth from '../auth/auth.component';
 
 export default class Login extends Component {
     constructor(){
@@ -41,8 +40,10 @@ export default class Login extends Component {
             email: this.state.email,
             password: this.state.password,
         };
+
         console.log('submit');
         console.log(User);
+
         fetch('http://localhost:5000/user/login', {
         method: 'POST',
         headers: {
@@ -51,13 +52,8 @@ export default class Login extends Component {
         body: JSON.stringify(User),
         })
         .then(res => res.json())
-        .then(res => localStorage.setItem('accessToken', res.token));
-
-        // if(localStorage.getItem('accessToken') !== null) {
-        //     Auth.login(() => {
-        //         history.push('/main')
-        //     })
-        // }
+        .then(res => localStorage.setItem('accessToken', res.token))
+        .then(this.props.login);
     }
 
     render(){

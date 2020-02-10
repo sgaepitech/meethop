@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
   Redirect
@@ -11,41 +10,48 @@ import Landing from './components/landing/landing.component';
 import Main from './components/main/main.component';
 import EventManager from './components/event/dashboard.event.component';
 import NavBar from './components/navbar/navbar.component';
-
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    localStorage.getItem !== null
-      ? <Component {...props} />
-      : <Redirect to='/' />
-  )} />
-)
+import PrivateRoute from './components/router/private.component';
 
 class App extends Component {
+  constructor() {
+    super();
+    if(localStorage.getItem('accessToken') !== null && localStorage.getItem('accessToken') !== 'undefined') {
+      this.state = {
+        loggedIn: true
+      }
+    } else {
+      this.state = {
+        loggedIn: false
+      }
+    }
+  };
+
+  login = () => {
+    if(localStorage.getItem('accessToken') !== 'undefined') {
+      this.setState({
+        loggedIn: true
+      });
+    }
+  };
+
+  logout = () => {
+    localStorage.removeItem('accessToken');
+    this.setState({
+      loggedIn: false
+    });
+  };
 
   render() {
-    if(localStorage.getItem('accessToken') !== null) {
-      return (
-        <Router>
-          <NavBar logged="isLoggd" />
-          <Switch>
-            <Route exact path='/' component={Landing} />
-            <PrivateRoute path='/main' component={Main} />
-            <PrivateRoute path='/eventmanager' component={EventManager} />
-          </Switch>
-        </Router>
-      );
-    } else {
-      return (
-        <Router>
-          <NavBar/>
-          <Switch>
-            <Route exact path='/' component={Landing} />
-            <Route path='/main' component={Main} />
-            {/* <Route path='/eventmanager' component={EventManager} /> */}
-          </Switch>
-        </Router>
-      );
-    }
+    return (
+      <div style={{height: "100%"}}>
+        <NavBar status={this.state.loggedIn} logout={this.logout} login={this.login} />
+        <Switch>
+          <Route exact path='/' component={Landing} />
+          <PrivateRoute path='/main' component={Main} isAuthenticated={this.state.loggedIn} />
+          <PrivateRoute path='/event' component={EventManager} isAuthenticated={this.state.loggedIn} />
+        </Switch>
+      </div>
+    );
   }
 }
 
