@@ -11,6 +11,7 @@ import Main from './components/main/main.component';
 import EventManager from './components/event/dashboard.event.component';
 import NavBar from './components/navbar/navbar.component';
 import PrivateRoute from './components/router/private.component';
+import UserProfile from './components/userProfile.component';
 
 class App extends Component {
   constructor() {
@@ -49,6 +50,7 @@ class App extends Component {
           <Route exact path='/' component={Landing} />
           <PrivateRoute path='/main' component={Main} isAuthenticated={this.state.loggedIn} />
           <PrivateRoute path='/event' component={EventManager} isAuthenticated={this.state.loggedIn} />
+          <PrivateRoute path='/user' component={UserProfile} isAuthenticated={this.state.loggedIn} />
         </Switch>
       </div>
     );
