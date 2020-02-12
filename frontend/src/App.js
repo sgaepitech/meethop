@@ -18,13 +18,28 @@ class App extends Component {
     super();
     if(localStorage.getItem('accessToken') !== null && localStorage.getItem('accessToken') !== 'undefined') {
       this.state = {
-        loggedIn: true
+        loggedIn: true,
+        user: ''
       }
     } else {
       this.state = {
-        loggedIn: false
+        loggedIn: false,
+        user: ''
       }
     }
+  };
+
+  getUser = () => {
+    fetch("http://localhost:5000/user/read", {
+      method: "GET",
+      headers: { "x-access-token": localStorage.getItem('accessToken')}
+    })
+      .then((data) => data.json())
+      .then((res)=> this.setState({
+        user: res
+        })
+      )
+      // .then(() => console.log(this.state.user))
   };
 
   login = () => {
@@ -32,6 +47,7 @@ class App extends Component {
       this.setState({
         loggedIn: true
       });
+      this.getUser();
     }
   };
 
@@ -45,7 +61,7 @@ class App extends Component {
   render() {
     return (
       <div style={{height: "100%"}}>
-        <NavBar status={this.state.loggedIn} logout={this.logout} login={this.login} />
+        <NavBar status={this.state.loggedIn} logout={this.logout} login={this.login} user={this.state.user} />
         <Switch>
           <Route exact path='/' component={Landing} />
           <PrivateRoute path='/main' component={Main} isAuthenticated={this.state.loggedIn} />
