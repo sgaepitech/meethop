@@ -4,7 +4,8 @@ import { Button, Grid, Typography, Box, Link} from '@material-ui/core/';
 import Register from '../register/register.component';
 import "../../css/reset.css"
 import "../../css/text.css"
-import "../../css/landingpage.css"
+import "../../css/main.css"
+import ImgMediaCard from '../event/card.event.component';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,25 +26,14 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TextTitle = () => {
-    let classes = useStyles();
-    return(
-        <Grid container justify = "center">
-            <Typography className={classes.titleLP} style={{whiteSpace: 'pre-line'}}>
-                Create your experience.{"\n"}
-                Meet new people.{"\n"}
-                Have fun!
-            </Typography>
-        </Grid>
-    )
-}
-
 export default class Main extends Component {
     constructor(){
         super();
         this.state={
-            open: false
+            open: false,
+            eventList: ''
         }
+        this.getEventList()
     }
 
     handleOpen = () => {
@@ -57,18 +47,29 @@ export default class Main extends Component {
             open: false
         });
     };
+
+    getEventList = () => {
+            fetch('http://localhost:5000/event', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'x-access-token': localStorage.getItem('accessToken')
+            },
+        })
+            .then(res => res.json())
+            .then(res => this.setState({
+                eventList: res
+            }))
+    }
     
     render () {
-      return(
-        <div style={{height: "100%"}}>
-            <div className="bg-filter" style={{height: "100%"}}>
-                <TextTitle />
-                <Grid container justify="center">
-                    <Button variant="contained" color="primary" onClick={this.handleOpen}>Register</Button>
-                </Grid>
-                <Register open={this.state.open} onClose={this.handleClose} />
-                {/* <Copyright /> */}
-            </div>
-        </div>
-    )}
+            if(this.state.eventList === ''){
+                return <div>Loading</div>;
+            } else {
+                return(
+                    <div className='main-container'>
+                        <ImgMediaCard eventData={this.state.eventList[Math.floor(Math.random()*this.state.eventList.length)]} />
+                    </div>
+                )}
+    }
 }

@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NavBar(props) {
-    const { status, username, imgAvatar, logout, login } = props
+    const { status, username, imgAvatar, logout, login, user } = props
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
@@ -41,14 +41,14 @@ export default function NavBar(props) {
                         <img src={Logo} alt="Logo" width="80" />
                     </Link>
                     <Typography variant="h6" color="primary" className={classes.title}>MeetHop</Typography>
-                    <Link to={"/userprofile"} className="nav-link">
-                        <Button color="primary" onClick={() => {console.log("User profile clicked")}}>
-                            <Typography variant="button" className={classes.title}>{username}</Typography>
+                    <Link to={"/user"} className="nav-link">
+                        <Button color="primary">
+                            <Typography variant="button" className={classes.title}>{props.user.email}</Typography>
                             <Avatar className={classes.purple}>OP</Avatar>
                         </Button>
                     </Link>
                     <Link to={"/event"} className="nav-link">
-                        <Button variant="contained" color="primary" onClick={() => {console.log("Event management clicked")}}>Event management</Button>
+                        <Button variant="contained" color="primary">Event management</Button>
                     </Link>
                     <Button variant="contained" color="primary" onClick={props.logout}>Logout</Button>
                 </Toolbar>
