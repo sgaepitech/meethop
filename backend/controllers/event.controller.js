@@ -57,8 +57,23 @@ router.get("/owner", auth, (req, res) =>{
   })
 })
 
-router.get("/:category", auth, (req, res) =>{
-  console.log(req.params.category);
+
+
+router.get("/:id", auth, (req, res) =>{
+
+
+  Event.findById((req.params.id), (err, events) =>{
+
+    if(err){
+      console.log(err);
+    } else {
+      res.json(events)
+    }
+  })
+})
+
+
+router.get("/category/:category/", auth, (req, res, next) =>{
   Event.find({category: req.params.category}, (err, events) =>{
     if(err){
       console.log(err);
@@ -68,16 +83,6 @@ router.get("/:category", auth, (req, res) =>{
   })
 })
 
-router.get("/:id", auth, (req, res) =>{
-  console.log(req.params.id);
-  Event.findOne({id: req.params.id}, (err, ev) =>{
-    if(err){
-      console.log(err);
-    } else {
-      res.json(ev)
-    }
-  })
-})
 
 router.put("/edit/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) => {
