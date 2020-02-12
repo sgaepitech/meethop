@@ -33,6 +33,7 @@ export default class Main extends Component {
             open: false,
             eventList: ''
         }
+        this.getEventList()
     }
 
     handleOpen = () => {
@@ -48,7 +49,7 @@ export default class Main extends Component {
     };
 
     getEventList = () => {
-        fetch('http://localhost:5000/event', {
+            fetch('http://localhost:5000/event', {
             method: 'GET',
             headers: {
                 'Content-type': 'application/json',
@@ -56,14 +57,20 @@ export default class Main extends Component {
             },
         })
             .then(res => res.json())
-            .then(res => this.setState(res ))
-            .then(res => console.log(this.state.eventList))
+            .then(res => this.setState({
+                eventList: res
+            }))
+            .then(() => console.log(this.state.eventList.length))
     }
     
     render () {
-      return(
-        <div className='main-container'>
-            {/* <ImgMediaCard eventData={this.state.eventList[0]} /> */}
-        </div>
-    )}
+            if(this.state.eventList === ''){
+                return <div>Loading</div>;
+            } else {
+                return(
+                    <div className='main-container'>
+                        <ImgMediaCard eventData={this.state.eventList[Math.floor(Math.random()*this.state.eventList.length)]} />
+                    </div>
+                )}
+    }
 }

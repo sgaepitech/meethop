@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
+
 // import concert from '../public/images/concert.jpg';
 
 const useStyles = makeStyles({
@@ -32,7 +33,7 @@ export default function ImgMediaCard(props){
   const classes = useStyles();
   
   return(
-    <Grid container spacing={3}>
+    <Grid justify='center' container spacing={3}>
       <Grid item xs={3}>
         <Paper className={classes.paper}></Paper>
           <Card className={classes.root}>
@@ -41,19 +42,19 @@ export default function ImgMediaCard(props){
               component="img"
               alt={props.eventData.category}
               height="140"
-              image={props.eventData.avatar}
+              image={require('../../img/concert.jpg')}
               className={classes.large}
               title="Concert"
             />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                  {props.eventData.event_title}
+                  {props.eventData.title}
                   </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  {props.eventData.event_description}
+                  {props.eventData.description}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  {props.eventData.event_date}
+                  {props.eventData.date}
                 </Typography>
               </CardContent>
             </CardActionArea>
