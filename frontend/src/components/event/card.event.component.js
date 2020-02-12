@@ -28,7 +28,6 @@ export default function ImgMediaCard(props){
   const {eventData} = props
 
   const classes = useStyles();
-  
   return(
     <Grid justify='center' container spacing={3}>
       <Grid item xs={3}>
@@ -61,7 +60,7 @@ export default function ImgMediaCard(props){
             </Button>
           </CardActions>
           <CardActions>
-            <Participate />
+            <Participate eventID={props.eventData._id} />
           </CardActions>
         </Card>
       </Grid>
