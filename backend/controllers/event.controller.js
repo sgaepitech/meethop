@@ -27,7 +27,8 @@ router.post("/create", auth, (req, res) => {
             category: req.body.category,
             owner: req.user._id,
             date: req.body.date,
-            participantsNumber: req.body.participantsNumber
+            participantsNumber: req.body.participantsNumber,
+            time: req.body.time
 
     });
 
@@ -73,15 +74,6 @@ router.get("/:id", auth, (req, res) =>{
 })
 
 
-router.get("/category/:category/", auth, (req, res, next) =>{
-  Event.find({category: req.params.category}, (err, events) =>{
-    if(err){
-      console.log(err);
-    } else {
-      res.json(events)
-    }
-  })
-})
 
 
 router.put("/edit/:id", auth, (req, res, next) =>{
@@ -94,6 +86,7 @@ router.put("/edit/:id", auth, (req, res, next) =>{
       if(req.body.category) {event.category = req.body.category;}
       if(req.user._id) {event.owner = req.user._id;}
       if(req.body.date) {event.date = req.body.date;}
+      if(req.body.time) {event.time = req.body.time;}
       event.save();
       res.status(200).json(event)
     }
