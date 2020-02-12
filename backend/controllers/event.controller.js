@@ -38,7 +38,6 @@ router.post("/create", auth, (req, res) => {
 });
 
 router.get("/", auth, (req, res) => {
-  console.log('retour de /')
   Event.find((err, events) => {
     if(err){
       console.log(err);
