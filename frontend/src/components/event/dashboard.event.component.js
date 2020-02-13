@@ -27,7 +27,7 @@ export default class Dashboard extends Component {
         this.state = {
             userParticipation: ['event1', 'event2'],
             userCreated: '',
-            eventStatus: [ true,false, false, false, false ]
+            openEvent: ''            
         }
         this.getEventOwnedByUser();
     }
@@ -62,6 +62,12 @@ export default class Dashboard extends Component {
     //     })
     // }
 
+    handleEventChange = (e) => {
+        this.setState({
+            openEvent: e
+        })
+    }
+
     render() {
         if(this.state.userCreated === '') {
             return (
@@ -74,11 +80,8 @@ export default class Dashboard extends Component {
         console.log(this.state)
         console.log('-----------------------')
 
-
         let details;
-        if(this.state.eventStatus[0]) {
-            details = <Typography>Je suis l'event</Typography>
-        }
+
         return (
             <Grid container item xs={12}>
                 <Grid container item xs={3} justify="center" alignItems="center">
