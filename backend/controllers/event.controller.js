@@ -60,14 +60,34 @@ router.get("/owner", auth, (req, res) =>{
 
 
 
-router.get("/:id", auth, (req, res) =>{
-
+router.get("/id/:id", auth, (req, res) =>{
 
   Event.findById((req.params.id), (err, events) =>{
 
     if(err){
       console.log(err);
     } else {
+      res.json(events)
+    }
+  })
+})
+
+router.get("/participating", auth, (req, res) =>{
+  Event.find({participants : req.user.id}, (err, events)=>{
+    if(err){
+      console.log(err);
+    }else {
+      res.json(events)
+    }
+  })
+})
+
+
+router.get("/postulating", auth, (req, res) =>{
+  Event.find({waitingList : req.user.id}, (err, events)=>{
+    if(err){
+      console.log(err);
+    }else {
       res.json(events)
     }
   })
