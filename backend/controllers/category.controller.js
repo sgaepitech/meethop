@@ -66,4 +66,14 @@ router.get("/:category", auth, (req, res, next) => {
   })
 })
 
+router.get("/all", auth, (req, res) =>{
+  Category.find((err, cat) =>{
+    if(err){
+      console.log(err);
+    } else {
+      res.json(cat);
+    }
+  })
+})
+
 module.exports = router;
