@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
-    Button
+    Button,
+    Grid
 } from '@material-ui/core';
 import {
     Cancel,
@@ -41,30 +42,34 @@ export default class Participate extends Component {
     render() {
         console.log(this.state)
         return (
-            <div width='100%'>
-                <Button 
-                    className={'participationBtn'}
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    value='true'
-                    onClick={this.handleParticipationOKChange}
-                    endIcon={<CheckCircle />}
-                >
-                    I'm in
-                </Button>
-                <Button
-                    className='participationBtn'
-                    variant="contained"
-                    color="secondary"
-                    size="large"
-                    value='false'
-                    onClick={this.handleParticipationNopeChange}
-                    endIcon={<Cancel />}
-                >
-                    I'm out
-                </Button>
-           </div>
+            <Grid container>
+                <Grid item xs={6}>
+                    <Button 
+                        className={'participationBtn'}
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        value='true'
+                        onClick={this.handleParticipationOKChange}
+                        endIcon={<CheckCircle />}
+                    >
+                        I'm in
+                    </Button>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button
+                        className='participationBtn'
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        value='false'
+                        onClick={this.handleParticipationNopeChange}
+                        endIcon={<Cancel />}
+                    >
+                        I'm out
+                    </Button>
+                </Grid>
+           </Grid>
         );
     }
 }

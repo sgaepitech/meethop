@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Grid, Typography, Box, Link} from '@material-ui/core/';
+import { Button, makeStyles, Grid, Typography, Box, Link} from '@material-ui/core/';
 import Register from '../register/register.component';
 import "../../css/reset.css"
 import "../../css/text.css"
