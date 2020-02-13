@@ -14,22 +14,6 @@ import Participate from './participation.event.component'
  
 export default function DetailEvent(props) {
     const {open, onClose, eventData} = props
-    // const [user, setUser] = React.useState('');
-    // let participationURI = 'http://localhost:5000/user/'+this.state._id
-
-    // getParticipantList = () => {
-    //     fetch(participationURI, {
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-type': 'application/json',
-    //         'x-access-token': localStorage.getItem('accessToken')
-    //     },
-    // })
-    //     .then(res => res.json())
-    //     .then(res => this.setState({
-    //         eventList: res
-    //     }))
-    // }
 
     return (
         <Dialog maxWidth='xl' open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-title">
