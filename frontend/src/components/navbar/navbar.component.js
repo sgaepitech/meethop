@@ -35,7 +35,7 @@ export default function NavBar(props) {
     if(props.status === true) {
         return (
             <div className={classes.root}>
-            <AppBar position="absolute"  style={{ background: 'transparent', boxShadow: 'none'}}>
+            <AppBar position="static"  style={{ background: 'transparent', boxShadow: 'none'}}>
                 <Toolbar>
                     <Link to={"/main"} className="nav-link">
                         <img src={Logo} alt="Logo" width="80" />
@@ -58,7 +58,7 @@ export default function NavBar(props) {
     } else {
         return (
             <div className={classes.root}>
-            <AppBar position="absolute"  style={{ background: 'transparent', boxShadow: 'none'}}>
+            <AppBar position="static"  style={{ background: 'transparent', boxShadow: 'none'}}>
                 <Toolbar>
                     <img src={Logo} alt="Logo" width="80" />
                     <Typography variant="h6" color="primary" className={classes.title}>MeetHop</Typography>
