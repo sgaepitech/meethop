@@ -139,22 +139,14 @@ router.put("/postulate/:id", auth, (req, res, next) =>{
 
       const User = mongoose.model('User');
       User.findById(req.user._id, (err, lol) => {
-        console.log("user :");
-        console.log(lol);
       });
 
       var objectId = mongoose.Types.ObjectId;
-      console.log(event.waitingList);
       event.waitingList.push(req.user._id)
-      console.log(event.waitingList);
       event.save()
       .then((ev) => {
         res.json(ev)
-        console.log(ev)
       }).catch((err) =>{
-        console.log(req.user);
-        console.log(err);
-        console.log(event);
         res.status(500).send('Error : cannot add postulant');
       });
     } else
@@ -173,7 +165,6 @@ router.put("/unpostulate/:id", auth, (req, res) =>{
       .then((event) =>{
         res.status(200).json(event)
       }).catch((err) => {
-        console.log(err);
         res.status(500).send('unpostulate failed')
       })
     }
@@ -192,14 +183,12 @@ router.put("/validate/:id", auth, (req, res, next) =>{
     if (!participantExists) {
       if(event.participants.length >= event.participants_number)
         return('Event already full');
-      console.log(req.body._id)
       event.participants.push(req.body._id)
       event.waitingList.splice(event.waitingList.indexOf(req.body._id))
       event.save()
       .then((event) => {
         res.status(200).json(event)
       }).catch((err) => {
-        console.log(err);
         res.status(500).send('participation failed')
       });
     }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Grid, Typography, Box, Link} from '@material-ui/core/';
-import Register from '../register/register.component';
+import { Button, Grid, Typography, Box, Link } from '@material-ui/core/';
 import "../../css/reset.css"
 import "../../css/text.css"
 import "../../css/main.css"
@@ -60,17 +59,16 @@ export default class Main extends Component {
             .then(res => this.setState({
                 eventList: res
             }))
-            .then(() => console.log(this.state.eventList.length))
     }
     
     render () {
-            if(this.state.eventList === ''){
-                return <div>Loading</div>;
-            } else {
-                return(
-                    <div className='main-container'>
-                        <ImgMediaCard eventData={this.state.eventList[Math.floor(Math.random()*this.state.eventList.length)]} />
-                    </div>
-                )}
+        if(this.state.eventList === ''){
+            return <div>Loading</div>;
+        } else {
+            return(
+                <div className='main-container'>
+                    <ImgMediaCard eventData={this.state.eventList[Math.floor(Math.random()*this.state.eventList.length)]} />
+                </div>
+            )}
     }
 }

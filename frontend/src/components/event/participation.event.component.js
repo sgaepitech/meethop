@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
-    Button
+    Button,
+    Grid
 } from '@material-ui/core';
 import {
     Cancel,
@@ -8,69 +9,67 @@ import {
 } from '@material-ui/icons';
 
 export default class Participate extends Component {
-    constructor(){
+    constructor(props){
         super();
         this.state={
-            id: '',
-            participate: '',
+            waitingList: '',
+            id: props.eventID
         }
     }
 
-    handleParticipationOKChange = (e) => {
-        console.log(this.state.participate)
-        this.setState({
-            participate: 'true'
-        });
-    };
-
-    handleParticipationNopeChange = (e) => {
-        this.setState({
-            participate: 'false'
+    handleParticipationOKChange = () => {
+        let participationURI = 'http://localhost:5000/event/postulate/'+this.state.id
+        fetch(participationURI, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json',
+                'x-access-token': localStorage.getItem('accessToken')
+            }
         })
-        console.log(this.state.participate)
     };
 
-    // handleParticipation = (e) => {
-    //     e.preventDefault();
-    //     fetch('http://localhost:5000/event/postulate/:id', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-type': 'application/json',
-    //         'x-access-token': localStorage.getItem('accessToken')
-    //     },
-    //     body: JSON.stringify(User),
-    //     })
-    //     .then(res => res.json())
-    //     .then(res => localStorage.setItem('accessToken', res.token))
-    //     .then(this.props.login);
-    // }
+    handleParticipationNopeChange = () => {
+        let participationURI = 'http://localhost:5000/event/unpostulate/'+this.state.id
+        fetch(participationURI, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json',
+                'x-access-token': localStorage.getItem('accessToken')
+            }
+        })
+    };
 
     render() {
+        console.log(this.state)
         return (
-            <div width='100%'>
-                <Button 
-                    className={'participationBtn'}
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    value='true'
-                    onClick={this.handleParticipationOKChange}
-                    endIcon={<CheckCircle />}
-                >
-                    I'm in
-                </Button>
-                <Button
-                    className='participationBtn'
-                    variant="contained"
-                    color="secondary"
-                    size="large"
-                    value='false'
-                    onClick={this.handleParticipationNopeChange}
-                    endIcon={<Cancel />}
-                >
-                    I'm out
-                </Button>
-           </div>
+            <Grid container>
+                <Grid item xs={6}>
+                    <Button 
+                        className={'participationBtn'}
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        value='true'
+                        onClick={this.handleParticipationOKChange}
+                        endIcon={<CheckCircle />}
+                    >
+                        I'm in
+                    </Button>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button
+                        className='participationBtn'
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        value='false'
+                        onClick={this.handleParticipationNopeChange}
+                        endIcon={<Cancel />}
+                    >
+                        I'm out
+                    </Button>
+                </Grid>
+           </Grid>
         );
     }
 }
