@@ -52,6 +52,15 @@ router.post("/create", async (req, res) => {
     });
 });
 
+router.get("/users", (req,res) =>{
+  User.find((err, users) =>{
+    if(err){
+      console.log(err)
+    }else {
+      res.json(users);
+    }
+  })
+});
 
 // #############
 // # READ USER #
@@ -60,6 +69,16 @@ router.post("/create", async (req, res) => {
 router.get("/read", auth, async (req, res) => {
     const user = await User.findById(req.user._id).select("-password");
     res.json(user);
+});
+
+router.get("/:id", auth, (req,res) =>{
+  User.findById((req.params.id), (err, user) =>{
+    if(err){
+      console.log(err)
+    } else {
+      res.json(user)
+    }
+  })
 });
 
 
