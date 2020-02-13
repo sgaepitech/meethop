@@ -59,7 +59,6 @@ export default class Main extends Component {
             .then(res => this.setState({
                 eventList: res
             }))
-            .then(() => console.log(this.state.eventList.length))
     }
     
     render () {
