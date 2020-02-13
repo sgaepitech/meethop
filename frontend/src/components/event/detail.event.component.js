@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React from 'react';
 import {
     Dialog,
     DialogContent,
@@ -8,12 +8,28 @@ import {
     ListItem
 } from '@material-ui/core';
 import {
-    Cancel,
+    Cancel
 } from '@material-ui/icons';
 import Participate from './participation.event.component'
  
 export default function DetailEvent(props) {
     const {open, onClose, eventData} = props
+    // const [user, setUser] = React.useState('');
+    // let participationURI = 'http://localhost:5000/user/'+this.state._id
+
+    // getParticipantList = () => {
+    //     fetch(participationURI, {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-type': 'application/json',
+    //         'x-access-token': localStorage.getItem('accessToken')
+    //     },
+    // })
+    //     .then(res => res.json())
+    //     .then(res => this.setState({
+    //         eventList: res
+    //     }))
+    // }
 
     return (
         <Dialog maxWidth='xl' open={props.open} onClose={props.onClose} aria-labelledby="form-dialog-title">
@@ -30,7 +46,7 @@ export default function DetailEvent(props) {
                         {props.eventData.date}
                         </Typography>
                     </Grid>
-                    <Grid spacing={6} item xs={5}>
+                    <Grid item xs={5}>
                         <Typography component="h3">Owner</Typography>
                         <Typography component="p">{props.eventData.owner}</Typography>
                         
