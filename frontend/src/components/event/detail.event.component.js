@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import {
     Dialog,
     DialogContent,
     Typography,
     Grid,
-    IconButton
+    IconButton,
+    ListItem
 } from '@material-ui/core';
 import {
     Cancel,
@@ -30,10 +31,13 @@ export default function DetailEvent(props) {
                         </Typography>
                     </Grid>
                     <Grid spacing={6} item xs={5}>
-                    <Typography component="h3">Owner</Typography>
-                    
-                    <Typography component="h3">Participants</Typography>
-                    <Typography component="h3">Waiting</Typography>
+                        <Typography component="h3">Owner</Typography>
+                        <Typography component="p">{props.eventData.owner}</Typography>
+                        
+                        <Typography component="h3">Participants</Typography>
+                        <ListItem>{props.eventData.participants.map((item) => item)}</ListItem>
+                        <Typography component="h3">Waiting</Typography>
+                        <ListItem>{props.eventData.waitingList.map((item) => item)}</ListItem>
                     </Grid>
                     <Grid item xs={1}>
                         <IconButton open={props.open} onClick={props.onClose} aria-label="close">
@@ -42,7 +46,7 @@ export default function DetailEvent(props) {
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                    <Participate />
+                    <Participate eventID={props.eventData._id} />
                 </Grid>
             </DialogContent>
         </Dialog>

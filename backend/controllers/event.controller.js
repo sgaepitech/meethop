@@ -73,7 +73,7 @@ router.get("/id/:id", auth, (req, res) =>{
 })
 
 router.get("/participating", auth, (req, res) =>{
-  Event.find({participants : req.user.id}, (err, events)=>{
+  Event.find({participants : req.user._id}, (err, events)=>{
     if(err){
       console.log(err);
     }else {
@@ -84,7 +84,7 @@ router.get("/participating", auth, (req, res) =>{
 
 
 router.get("/postulating", auth, (req, res) =>{
-  Event.find({waitingList : req.user.id}, (err, events)=>{
+  Event.find({waitingList : req.user._id}, (err, events)=>{
     if(err){
       console.log(err);
     }else {
