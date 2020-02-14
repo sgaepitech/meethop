@@ -12,6 +12,7 @@ import {
   Paper
 } from '@material-ui/core';
 import Participate from '../event/participation.event.component'
+import DetailEvent from './detail.event.component';
 
 const useStyles = makeStyles({
   root: {
@@ -26,6 +27,15 @@ const useStyles = makeStyles({
 
 export default function ImgMediaCard(props){
   const {eventData} = props
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const classes = useStyles();
   return(
@@ -55,9 +65,8 @@ export default function ImgMediaCard(props){
               </CardContent>
             </CardActionArea>
           <CardActions>
-            <Button size="small" color="primary">
-              Voir
-            </Button>
+            <Button variant="outlined" color='primary' onClick={handleOpen}>Voir</Button>
+            <DetailEvent eventData={props.eventData} open={open} onClose={handleClose} />
           </CardActions>
           <CardActions>
             <Participate eventID={props.eventData._id} />
