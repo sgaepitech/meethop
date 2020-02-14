@@ -4,26 +4,28 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-
-import axios from 'axios';
 
 import InterestsChips from './interestsChips.component';
-import '../css/cards.css'
+import UserEditForm from './userEditForm.component';
+import '../../css/userProfile.css'
 
 const ContentWidget = (props) => {
-    console.log("Content widget", props.content)
-    if (props.type === "User Informations" || props.type === "User Description") {
+    //console.log("Content widget", props.content)
+    if (props.type === "User Informations" || props.type === "User Description"){
+        if (props.edition){
+            return (
+                <UserEditForm user={props.user} edition={props.edition} type={props.type}/>
+            );
+        }
         return (
-            <Typography variant="body2" color="textSecondary" component="p">
-                {props.content !== undefined ? props.content : "Nothing to display... Maybe a missing non mandatory field ?"}
-            </Typography>
+            <UserEditForm user={props.user} edition={props.edition} type={props.type}/>
         );
-    };
+    }
+
     if (props.type === "User Interests") {
         return (<div>
-            {props.content !== undefined ? <InterestsChips content={props.content} /> : "Please wait... Loading in progress"}
-            </div>
+            {props.content !== undefined ? <InterestsChips user={props.user} content={props.content} edition={props.edition} /> : "Please wait... Loading in progress"}
+        </div>
         );
     };
 };
@@ -34,14 +36,16 @@ export default class MeethopCard extends Component {
         super(props);
         this.state = {
             id: this.props.title,
-            message: "",
+            userInfo: this.props.user,
             loading: true,
+            editMode: false,
         };
-        this.handleClick = this.handleClick.bind(this);
+        this.handleClickEdit = this.handleClickEdit.bind(this);
+        this.handleClickSave = this.handleClickSave.bind(this);
     }
 
     getData() {
-        console.log("print in getData - card component", this.props);
+        //console.log("print in getData - card component", this.props);
         if (this.props.user) {
             this.setState({ toPut: "user", data: this.props.user });
             this.setState({ user: <span><strong>Username:</strong> {this.props.user.username}<br /><strong>Email:</strong> {this.props.user.email}<br /><strong>Location:</strong> {this.props.user.location}<br /><strong>Birthdate:</strong> {this.props.user.birthdate}<br /></span> });
@@ -54,28 +58,17 @@ export default class MeethopCard extends Component {
         if (this.props.description) {
             this.setState({ toPut: "description", data: this.props.description });
         }
-        this.setState({loading: false})
-        console.log(this.state);
+        this.setState({ loading: false })
+        //console.log(this.state);
 
     }
 
-    handleClick() {
-        axios.put('http://localhost:5000/user/update/', {
-            [this.state.toPut]: [this.state.data],
-        },
-            {
-                headers: {
-                    'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTM5OTg1NTk2ZWIyZTFiZDZiOWRiMjIiLCJpYXQiOjE1ODA5MjQzODl9.KpjyOP9WqAIkJcjkvLQprqzcQvtOqRUM124T_QKoFwk',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                console.log(response);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+    handleClickEdit() {
+        this.setState({ editMode: true })
+    };
 
+    handleClickSave() {
+        this.setState({ editMode: false })
     };
 
     componentDidMount() {
@@ -83,34 +76,32 @@ export default class MeethopCard extends Component {
     }
 
     componentDidUpdate() {
-        console.log("render - didUpdate: ", this.state);
-    }
-
-    callbackFunction = (childData) => {
-        this.setState({ message: childData })
+        //console.log("render - didUpdate: ", this.state);
     }
 
     render() {
-        console.log("render - meethop card: ", this.state);
-            return (
-                <Card className="card" >
-                    <CardHeader
-                        title={this.props.title}
-                        className="cardhead"
-                    >
-                    </CardHeader>
-                    <CardContent className="carduser">
-                        <ContentWidget
-                            type={this.props.title}
-                            content={this.state.user || this.state.data}
-                        />
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small" color="primary" onClick={this.handleClick}>
-                            Save
-                        </Button>
-                    </CardActions>
-                </Card>
-            );
+        //console.log("render - meethop card: ", this.state);
+        return (
+            <Card className="card" >
+                <CardHeader
+                    title={this.props.title}
+                    className="cardhead"
+                >
+                </CardHeader>
+                <CardContent className="carduser">
+                    <ContentWidget
+                        type={this.props.title}
+                        content={this.state.user || this.state.data}
+                        edition={this.state.editMode}
+                        user={this.state.userInfo}
+                    />
+                </CardContent>
+                <CardActions>
+                    <Button className="edition" size="small" variant="outlined" color="secondary" onClick={this.state.editMode ? this.handleClickSave : this.handleClickEdit}>
+                        {this.state.editMode ? "Stop editing" : "Edit"}
+                    </Button>
+                </CardActions>
+            </Card>
+        );
     }
 }

@@ -11,8 +11,10 @@ import {
 import axios from 'axios';
 
 import MeethopCard from './meethopCard.component';
+import '../../css/main.css'
 
-const SampleUser = {
+
+/* const SampleUser = {
   username: 'Toto',
   email: 'super@toto.com',
   password: 'secret',
@@ -22,15 +24,15 @@ const SampleUser = {
   interests: ["concert", "sport", "plein air", "cinéma", "théatre", "expo/musée", "nautique", "shopping"],
   warnings: 0,
   isActive: true,
-}
+} */
 
 const useStyles = makeStyles(theme => ({
   components: {
-    marginTop: '50px',
+    marginTop: '0px',
   },
   header: {
     width: "100%",
-    minHeight: "350px",
+    minHeight: "250px",
     background: "linear-gradient(#e66465, #9198e5);",
     margin: "30px 0",
   },
@@ -67,7 +69,7 @@ const ProfileHeader = (props) => {
   return (
     <Grid container className={classes.header} direction="column" justify="center" alignItems="center">
       <Grid item xs={12}>
-        <Avatar className={classes.avatar} alt={user.username} src={require("../img/avatar_sample.png")} />
+        <Avatar className={classes.avatar} alt={user.username} src={require("../../img/avatar_sample.png")} />
       </Grid>
     </Grid>
   )
@@ -81,7 +83,7 @@ const ProfileInformations = (props) => {
         <MeethopCard type="userCard" title="User Informations" user={user} />
       </Grid>
       <Grid item xs={6}>
-        <MeethopCard type="userCard" title="User Description" description={user.description} />
+        <MeethopCard type="userCard" title="User Description" user={user} description={user.description} />
       </Grid>
     </Grid>
   )
@@ -89,11 +91,11 @@ const ProfileInformations = (props) => {
 
 const UserInterests = (props) => {
   let classes = useStyles();
-  let hobbies = props.user;
+  let hobbies = props.interests;
   return (
     <Grid container className={classes.gridContain}>
       <Grid item xs={12}>
-        <MeethopCard type="userCard" title="User Interests" interests={hobbies} />
+        <MeethopCard type="userCard" title="User Interests" user={props.user} interests={hobbies} />
       </Grid>
     </Grid>
   )
@@ -113,7 +115,7 @@ export default class UserProfile extends Component {
 
   getUser() {
     axios.get('http://localhost:5000/user/read/', {
-      headers: { 'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTM5OTg1NTk2ZWIyZTFiZDZiOWRiMjIiLCJpYXQiOjE1ODA5MjQzODl9.KpjyOP9WqAIkJcjkvLQprqzcQvtOqRUM124T_QKoFwk' }
+      headers: { 'x-access-token':  localStorage.getItem('accessToken') }
     })
 
       .then(response => {
@@ -121,7 +123,7 @@ export default class UserProfile extends Component {
         this.setState({ loading: false });
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       })
   }
 
@@ -135,10 +137,10 @@ export default class UserProfile extends Component {
       return <CustomLoader />
     else {
       return (
-        <Container maxWidth="md">
+        <Container maxWidth="md" className="">
           <ProfileHeader user={this.state.user} />
           <ProfileInformations user={this.state.user} />
-          <UserInterests user={this.state.user.interests} />
+          <UserInterests user={this.state.user} interests={this.state.user.interests} />
         </Container>
       )
     }
