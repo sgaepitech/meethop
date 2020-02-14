@@ -11,7 +11,7 @@ import Main from './components/main/main.component';
 import EventManager from './components/event/dashboard.event.component';
 import NavBar from './components/navbar/navbar.component';
 import PrivateRoute from './components/router/private.component';
-import UserProfile from './components/userProfile.component';
+import UserProfile from './components/profile/userProfile.component';
 
 class App extends Component {
   constructor() {
