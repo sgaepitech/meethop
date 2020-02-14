@@ -81,7 +81,6 @@ export default class CreateEvent extends Component {
       });
     };
 
-
   handleSubmit = (e) => {
     e.preventDefault();
     const newEvent = {
@@ -192,7 +191,7 @@ export default class CreateEvent extends Component {
               required
             >
               <MenuItem value="">
-                <em>None</em>
+                <em>Choisissez une ville</em>
               </MenuItem>
               <MenuItem value="Paris">Paris</MenuItem>
               <MenuItem value="Lyon">Lyon</MenuItem>
@@ -213,18 +212,17 @@ export default class CreateEvent extends Component {
               required
             >
               <MenuItem value="">
-                <em>Select a category</em>
+                <em>Sélectionner une catégorie</em>
               </MenuItem>
               <MenuItem value="concert">Concert</MenuItem>
               <MenuItem value="sport">Sport</MenuItem>
-              <MenuItem value="outdoor">Outdoor</MenuItem>
-              <MenuItem value="cinéma">Cinéma</MenuItem>
+              <MenuItem value="outdoor">Plein air</MenuItem>
+              <MenuItem value="cinéma">Cinema</MenuItem>
               <MenuItem value="theater">Theater</MenuItem>
-              <MenuItem value="museum">Museum</MenuItem>
-              <MenuItem value="nautic">Nautic</MenuItem>
+              <MenuItem value="museum">Musée</MenuItem>
+              <MenuItem value="nautic">Nautique</MenuItem>
               <MenuItem value="shopping">Shopping</MenuItem>
               <MenuItem value="board games">Board Games</MenuItem>
-
             </Select>
 
             <Button
@@ -233,15 +231,8 @@ export default class CreateEvent extends Component {
               variant="contained"
               color="primary"
             >
-              Register
+              Créer un événement
             </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Already registered? Log in"}
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
       </DialogContent>

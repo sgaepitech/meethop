@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React from 'react';
 import {
     Dialog,
     DialogContent,
@@ -8,7 +8,7 @@ import {
     ListItem
 } from '@material-ui/core';
 import {
-    Cancel,
+    Cancel
 } from '@material-ui/icons';
 import Participate from './participation.event.component'
  
@@ -30,7 +30,7 @@ export default function DetailEvent(props) {
                         {props.eventData.date}
                         </Typography>
                     </Grid>
-                    <Grid spacing={6} item xs={5}>
+                    <Grid item xs={5}>
                         <Typography component="h3">Owner</Typography>
                         <Typography component="p">{props.eventData.owner}</Typography>
                         
