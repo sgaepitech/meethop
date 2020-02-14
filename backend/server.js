@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const userController = require('./controllers/user.controller');
+const eventController = require('./controllers/event.controller');
+const categoryController = require('./controllers/category.controller');
 // const bodyParser = require('body-parser');
 const moment = require("moment");
 
@@ -21,7 +23,8 @@ if (!config.get("myprivatekey")) {
 app.use(cors());
 app.use(express.json());
 app.use('/user', userController);
-
+app.use('/event', eventController);
+app.use('/category', categoryController);
 
 const uri = process.env.ATLAS_URI;
 

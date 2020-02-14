@@ -1,0 +1,30 @@
+/* Styles for meethopCard.component */
+.card {
+    max-width: 100% !important;
+}
+.cardhead {
+    color: #fff;
+    background-color: #e66465;
+}
+.carduser{
+    min-height: 100px;
+}
+.saving{
+    margin-top: 15px !important;
+}
+.edition{
+    width: 90px;
+    margin: auto !important;
+}
+
+/* Styles for interestsChips.component */
+.present {
+    margin-right: 10px;
+    background-color: #e66465;
+    color: #fff,
+}
+.absent {
+    margin-right: 10px;
+    background-color: rgb(104, 101, 101);
+    color: #fff;
+}
