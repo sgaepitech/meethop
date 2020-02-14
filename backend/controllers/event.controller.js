@@ -8,11 +8,37 @@ const auth = require("../auth/auth");
 
 mongoose.set('useFindAndModify', false);
 
-
-// ################
-// # CREATE EVENT #
-// ################
-
+/**
+ * @api {post} /:id Create event
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.post("/create", auth, (req, res) => {
     const { errors, isValid } = authevent(req.body);
 
@@ -28,8 +54,8 @@ router.post("/create", auth, (req, res) => {
             owner: req.user._id,
             date: req.body.date,
             participantsNumber: req.body.participantsNumber,
-            time: req.body.time
-
+            time: req.body.time,
+            location: req.body.location
     });
 
     newEvent
@@ -38,6 +64,54 @@ router.post("/create", auth, (req, res) => {
         .catch(err => console.log(err));
 });
 
+
+/**
+ * @api {get} / Get all events
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [[
+    {
+        "participants": [],
+        "waitingList": [
+            "5e39985596eb2e1bd6b9db22"
+        ],
+        "coordinates": [],
+        "_id": "5e3d21e23ca6870b0556d172",
+        "title": "event de tutu qui fait blih",
+        "description": "mais kes tu boi doudou di don",
+        "category": "jeux de societe",
+        "owner": "5e3aa185acf7411e24690aaf",
+        "date": "1970-01-01T03:37:32.020Z",
+        "participantsNumber": 4,
+        "__v": 9
+    },
+    {
+        "participants": [],
+        "waitingList": [],
+        "coordinates": [],
+        "_id": "5e417b762361ad044c21213e",
+        "title": "I love PostMan",
+        "description": "Pour tous ceux qui pensent que le front, en vrai, c'est surtout une histoire de marketeux, et qu'un bon service web, c'est une API... POINT, rien d'autre",
+        "category": "expo",
+        "owner": "5e3aa185acf7411e24690aaf",
+        "date": "1970-01-01T08:03:42.020Z",
+        "participantsNumber": 42,
+        "__v": 0
+    },...]
+ * @apiErrorExample {json} User error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.get("/", auth, (req, res) => {
   Event.find((err, events) => {
     if(err){
@@ -48,6 +122,52 @@ router.get("/", auth, (req, res) => {
   });
 });
 
+/**
+ * @api {get} /owner Get all events of an event owner
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+        "participants": [],
+        "waitingList": [
+            "5e39985596eb2e1bd6b9db22"
+        ],
+        "coordinates": [],
+        "_id": "5e3d21e23ca6870b0556d172",
+        "title": "event de tutu qui fait blih",
+        "description": "mais kes tu boi doudou di don",
+        "category": "jeux de societe",
+        "owner": "5e3aa185acf7411e24690aaf",
+        "date": "1970-01-01T03:37:32.020Z",
+        "participantsNumber": 4,
+        "__v": 9
+    },
+    {
+        "participants": [],
+        "waitingList": [],
+        "coordinates": [],
+        "_id": "5e417b762361ad044c21213e",
+        "title": "I love PostMan",
+        "description": "Pour tous ceux qui pensent que le front, en vrai, c'est surtout une histoire de marketeux, et qu'un bon service web, c'est une API... POINT, rien d'autre",
+        "category": "expo",
+        "owner": "5e3aa185acf7411e24690aaf",
+        "date": "1970-01-01T08:03:42.020Z",
+        "participantsNumber": 42,
+        "__v": 0
+    },...]
+ * @apiErrorExample {json} User error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.get("/owner", auth, (req, res) =>{
   Event.find({owner: req.user._id}, (err, events) => {
     if (err){
@@ -58,8 +178,37 @@ router.get("/owner", auth, (req, res) =>{
   })
 })
 
-
-
+/**
+ * @api {get} /id/:id Get event by ID
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.get("/id/:id", auth, (req, res) =>{
 
   Event.findById((req.params.id), (err, events) =>{
@@ -72,6 +221,39 @@ router.get("/id/:id", auth, (req, res) =>{
   })
 })
 
+/**
+ * @api {post} /participating/:id Add user to a participants' list
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [
+        5e3c0fda3325611484e27aed
+      ],
+      "waitingList": [],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.get("/participating", auth, (req, res) =>{
   Event.find({participants : req.user._id}, (err, events)=>{
     if(err){
@@ -82,7 +264,39 @@ router.get("/participating", auth, (req, res) =>{
   })
 })
 
-
+/**
+ * @api {post} /postulating/:id Add user to a waiting list
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [
+        5e3c0fda3325611484e27aed
+      ],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.get("/postulating", auth, (req, res) =>{
   Event.find({waitingList : req.user._id}, (err, events)=>{
     if(err){
@@ -93,9 +307,39 @@ router.get("/postulating", auth, (req, res) =>{
   })
 })
 
-
-
-
+/**
+ * @api {post} /edit/:id Edit an event by id
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [
+        5e3c0fda3325611484e27aed
+      ],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.put("/edit/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) => {
     if (err)
@@ -107,12 +351,46 @@ router.put("/edit/:id", auth, (req, res, next) =>{
       if(req.user._id) {event.owner = req.user._id;}
       if(req.body.date) {event.date = req.body.date;}
       if(req.body.time) {event.time = req.body.time;}
+      if(req.body.location) {event.location = req.body.location;}
       event.save();
       res.status(200).json(event)
     }
   })
 })
 
+/**
+ * @api {post} /edit/:id Delete an event by id
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [
+        5e3c0fda3325611484e27aed
+      ],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.delete("/delete/:id", auth, (req, res, next) =>{
   Event.findByIdAndRemove(req.params.id, (err, ev) => {
       if (err)
@@ -123,7 +401,41 @@ router.delete("/delete/:id", auth, (req, res, next) =>{
   });
 });
 
-
+/**
+ * @api {put} /postulate/:id Update a waiting list
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [
+        5e3c0fda3325611484e27aed
+      ],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    Error: cannot add postulant
+ *    Error: already postulating
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.put("/postulate/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
@@ -150,11 +462,44 @@ router.put("/postulate/:id", auth, (req, res, next) =>{
         res.status(500).send('Error : cannot add postulant');
       });
     } else
-      res.status(400).send('already postulating');
+      res.status(400).send('Error: already postulating');
   })
 });
 
-
+/**
+ * @api {put} /unpostulate/:id Remove user from a waiting list
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [
+        5e3c0fda3325611484e27aed
+      ],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    Error: unpostulate failed
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.put("/unpostulate/:id", auth, (req, res) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
@@ -165,12 +510,48 @@ router.put("/unpostulate/:id", auth, (req, res) =>{
       .then((event) =>{
         res.status(200).json(event)
       }).catch((err) => {
-        res.status(500).send('unpostulate failed')
+        res.status(500).send('Error: unpostulate failed')
       })
     }
   });
 })
 
+/**
+ * @api {put} /validate/:id Validate user from a waiting list
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [
+        5e3c0fda3325611484e27aed
+      ],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    Error: participation failed
+ *    Error: already participating
+ *    Error: Event already full
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.put("/validate/:id", auth, (req, res, next) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
@@ -182,21 +563,55 @@ router.put("/validate/:id", auth, (req, res, next) =>{
 
     if (!participantExists) {
       if(event.participants.length >= event.participants_number)
-        return('Event already full');
+        return('Error: event already full');
       event.participants.push(req.body._id)
       event.waitingList.splice(event.waitingList.indexOf(req.body._id))
       event.save()
       .then((event) => {
         res.status(200).json(event)
       }).catch((err) => {
-        res.status(500).send('participation failed')
+        res.status(500).send('Error: participation failed')
       });
     }
     else
-      res.status(400).send('already participating');
+      res.status(400).send('Error: already participating');
   });
 });
 
+/**
+ * @api {put} /unvalidate/:id Unvalidate user from a participants' list
+ * @apiGroup Event
+ * @apiSuccess {Object[]} event Elements attached to an event
+ * @apiSuccess {String} event._id events ID
+ * @apiSuccess {String} event.owner ID of the owner of the event
+ * @apiSuccess {String} event.description Description of the event
+ * @apiSuccess {String} event.location Location of the event
+ * @apiSuccess {Array} event.coordinates Coordinates of the event (lat, lon)
+ * @apiSuccess {Array} event.category Categories of the event
+ * @apiSuccess {Array} event.isWaitingForEvent List of users by id who wants to participate but need approval by the owner of the event
+ * @apiSuccess {Array} event.isApprovedFromEvent List of users by id who wants to participate and have been approved by the owner of the event
+ * @apiSuccess {Date} event.date Date of the event
+ * @apiSuccessExample {json} Success
+ * HTTP/1.1 200 OK
+ *  [{
+      "participants": [],
+      "waitingList": [
+        5e3c0fda3325611484e27aed
+      ],
+      "coordinates": [],
+      "_id": "5e465a6237e2dc19e3b743f9",
+      "title": "culturez vous",
+      "description": "destructuration de langue française au travers de l'influence des peintres flamands du 12ème siècle",
+      "category": "expo",
+      "owner": "5e3aa185acf7411e24690aaf",
+      "date": "1970-01-01T00:51:22.020Z",
+      "location": "Jouy-en-Josas",
+      "participantsNumber": 12,
+    }]
+ * @apiErrorExample {json} User error
+ *    Error: unvalidate unsuccessful
+ *    HTTP/1.1 500 Internal Server Error
+ */
 router.put("/unvalidate/:id", auth, (req, res) =>{
   Event.findById(req.params.id, (err, event) =>{
     if(err)
@@ -210,7 +625,7 @@ router.put("/unvalidate/:id", auth, (req, res) =>{
             res.status(200).json(event)
           })
           .catch(err =>{
-            res.status(400).send('unvalidate non successful')
+            res.status(400).send('Error: unvalidate unsuccessful')
           });
         }
   })
